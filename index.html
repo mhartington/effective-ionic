@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Ionic + Angular: Superpowers for Mobile App Development</title>
+
+  <meta name="description" content="Ionic Framework Presentation: The beautiful, open source framework for developing hybrid mobile apps with HTML5.">
+  <meta name="author" content="https://twitter.com/adamdbradley">
+  <meta name="author" content="https://twitter.com/benjsperry">
+  <meta name="author" content="https://twitter.com/perrygovier">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+  <link rel="stylesheet" href="css/reveal.css">
+
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/base16-flat-dark.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+
+
+
+      <section>
+        <img src="img/ionic-logo.png" class="logo" width="296" style="display:block; margin:auto; margin-bottom:50px;">
+        <h4>Smarter, Better Ionic</h4>
+      </section>
+
+
+      <section>
+        <img src="img/me.png" style="max-width: 260px; max-height: 260px; border-radius: 50%; display:block; margin: auto; margin-bottom: 40px;">
+        <h3>Mike Hartington</h3>
+        <h4>Developer Advocate</h4>
+        <h4>Providence, RI</h4>
+        <p><a href="https://twitter.com/mhartington">@mhartington</a></p>
+        <p><a href="https://github.com/mhartington">github.com/mhartington</a></p>
+
+      </section>
+
+      <section>
+        <h3 style="font-size: 80px">Ionic!</h3>
+        <p style="font-size: 32px">
+          <strong>HTML5</strong> that acts like native</p>
+        <p style="font-size: 32px">Direct access to
+          <strong>native APIs</strong> with Cordova</p>
+        <p style="font-size: 32px">
+          <strong>Angular</strong> and
+          <strong>Sass</strong> for superpowered development
+        </p>
+        <p style="font-size: 32px">Familiar
+          <strong>web dev</strong> environment</p>
+      </section>
+
+      <section data-background="img/ionicio.png">
+      </section>
+
+
+      <section data-background="img/ionic-push.png">
+
+      </section>
+
+      <section data-background="img/community.jpg">
+      </section>
+
+
+
+      <section>
+        <h2>What this talk is not about</h2>
+
+        <h4>An intro to Ionic</h4>
+        <h4>An intro to mobile development</h4>
+        <h4>What the hell is Cordova?</h4>
+      </section>
+      <section>
+        <h2>What this talk is about</h2>
+        <h4>Practial tips for working in Ionic</h4>
+        <h4>Cool tips/tricks when working with Cordova</h4>
+        <h4>Looking at how we can extend a blank Ionic project</h4>
+        <h4 class="fragment">Excuse to use emojicons</h4>
+
+      </section>
+
+      <section data-background="white">
+        <h1 style="color:black">
+          ಠ_ಠ
+        </h1>
+      </section>
+
+      <section>
+        <h1>Linting</h1>
+      </section>
+
+      <section>
+        <h3>Lint all the things</h3>
+        <blockquote>The goal of this project is to help JavaScript developers write complex programs without worrying about typos and language gotchas.</blockquote>
+        <em>
+          <small>Stuff that we should be doing all the time</small>
+        </em>
+      </section>
+
+      <section>
+        <h3>Automate that lint</h3>
+        <p>Make use of gulp to handle this task</p>
+        <pre><code data-trim class="bash">
+            $ npm install --save-dev gulp-eslint
+          </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim>
+var eslint = require('gulp-eslint');
+
+gulp.task('lint', function() {
+  // Pass the code we want to lint
+  return gulp.src(['./www/js/**/*.js'])
+    // Send that to eslint
+    .pipe(eslint())
+    // then format the out put to something readable
+    .pipe(eslint.format('stylish', process.stderr));
+});
+
+          </code></pre>
+      </section>
+
+      <section>
+      <pre><code data-trim>
+var paths = {
+  sass: ['./scss/**/*.scss'],
+  js: ['./www/js/**/*.js']
+};
+
+gulp.task('watch', function() {
+  gulp.watch(paths.sass, ['sass']);
+  // lint while ionic serve
+  gulp.watch(paths.js, ['lint']);
+});
+
+      </code></pre>
+      </section>
+
+      <section>
+        <h3>Nothing Crazy</h3>
+        <p>Makes a huge differece with big apps</p>
+        <a href="https://github.com/driftyco/ionic/commit/ce06f6e40bdb2bc560d9241aa1ef23db4fff065f" target="_blank">
+          Huge clean up of code
+          </a>
+      </section>
+
+  <section>
+    <h3>Sample <code>.eslintrc</code> file</h3>
+    <pre><code data-trim>
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "ionic": true,
+    "IonicModule": true,
+    "angular": true,
+    "jqLite": true,
+    "forEach": true,
+    "isDefined": true,
+    "isNumber": true,
+    "isString": true,
+    "noop": true,
+    "extend": true,
+    "deprecated": true,
+    "cordova": true,
+    "DocumentTouch": true
+  },
+  "rules": {
+    "quotes": false,
+    "no-underscore-dangle": false,
+    "no-unused-expressions": false,
+    "curly": [2, "multi-line"],
+    "strict": false,
+    "no-use-before-define": false,
+    "eqeqeq": false,
+    "new-cap": [2, {"capIsNew": false}],
+    "dot-notation": [2, {"allowKeywords": false}],
+    "no-console": false,
+    "no-return-assign": false,
+    "no-shadow": false,
+    "comma-dangle": false,
+    "camelcase": [2, {"properties": "never"}]
+  }
+}
+    </code></pre>
+
+    <p>Sits in your project's root</p>
+  </section>
+
+<section>
+  <h4>There's also JSCS</h4>
+  <p><a target="_blank" href="http://jscs.info/">JavaScript Code Style</a></p>
+<br>
+  <h4>Linting plugins for all your editors</h4>
+
+  <p><a target="_blank" href="https://github.com/roadhump/SublimeLinter-eslint">Sublime Text</a></p>
+  <p><a target="_blank" href="https://atom.io/packages/linter-eslint">Atom</a></p>
+  <p><a target="_blank" href="http://plugins.jetbrains.com/plugin/7494">Webstorm</a></p>
+  <p><a target="_blank" href="https://github.com/scrooloose/syntastic/tree/master/syntax_checkers/javascript">Vim...if you're into that</a></p>
+  <p><a href="https://github.com/flycheck/flycheck" target="_blank">Emacs...if you're really into that</a></p>
+</section>
+
+<section>
+  <h1>Uglifying</h1>
+</section>
+
+<section>
+  <h3>MINIFYING/UGLIFYING YOUR CODE</h3>
+  <p>Quicker download times for your users?</p>
+  <p>Reduced number of HTTP requests?</p>
+  <p>Speed up script execution times?</p>
+</section>
+
+<section>
+  <h3>
+    Not really needed for Hybrid Apps!
+  </h3>
+  <img src="./img/minified.png" alt="js-minified">
+  <small>
+    <em>
+      <a href="http://mobileicecube.com/blog/should-you-minify-resources-in-cordovaphonegap-apps" target="_blank">Mobile Ice Cube blog</a>
+    </em>
+  </small>
+</section>
+
+
+<section>
+  <h3>REASONS TO MINIFY/UGLIFY FOR HYBRID</h3>
+  <h4>Protect your code</h4>
+  <a href="https://blog.nraboy.com/2014/11/extract-android-apk-view-source-code/" target="_blank">Extracting Souce Code From an APK</a>
+</section>
+
+<section>
+  <h3>
+    Cordova Hooks FTW
+  </h3>
+  <pre><code class="bash">
+$ npm install cordova-uglify --save-dev
+  </code></pre>
+
+  <a target="_blank" href="https://github.com/rossmartin/cordova-uglify">Cordova-Uglify</a>
+</section>
+
+<section>
+  <h3>Cordova-Uglify</h3>
+  <p>More straightforward - uses cordova hooks</p>
+  <p>Uglifies/Minifies JS and CSS</p>
+  <p>Comes with ng-annotate!</p>
+  <p>No extra gulp tasks/build steps needed</p>
+</section>
+
+<section>
+  <h1>Handling Images</h1>
+</section>
+
+<section>
+  <h1>(╯°□°)╯︵ ┻━┻</h1>
+  <blockquote>
+    Why is my app so big!!!??
+  </blockquote>
+</section>
+
+<section>
+  <h3>Over 600KB of Images</h3>
+  <img src="./img/page-growth.gif" alt="">
+  <p>
+    <a href="http://www.webperformancetoday.com/2013/06/05/web-page-growth-2010-2013/" target="_blank">
+      Web Performance Today
+    </a>
+  </p>
+<p>
+<a href="http://www.webperformancetoday.com/2014/12/02/page-bloat-update-average-top-1000-web-page-1795-kb-size/" target="_blank">Page Bloat</a>
+</p>
+</section>
+
+<section>
+  <h1>┬─┬ ノ('-'ノ)</h1>
+
+  <p>Maybe we should focus less on minified
+    <br>code and more on optimized images?</p>
+</section>
+
+<section>
+  <h3>gulp-imagemin</h3>
+  <pre><code class="bash">
+    $ npm install --save-dev gulp-imagemin imagemin-pngquant
+  </code></pre>
+  <p><a href="https://github.com/sindresorhus/gulp-imagemin" target="_blank">gulp-imagemin</a></p>
+</section>
+
+
+<section>
+  <pre><code class="javascript" data-trim>
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
+
+gulp.task('img', function() {
+  return gulp.src('./images/*')
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{
+        removeViewBox: false
+      }],
+      use: [pngquant()]
+    }))
+    .pipe(gulp.dest('./www/img'));
+});
+  </code></pre>
+</section>
+
+
+<section>
+  <h3>Images coming from the server?</h3>
+  <p>Have no fear...</p>
+</section>
+
+<section>
+  <h3>Picture element in a directive</h3>
+  <h3><a href="https://github.com/tinacious/angular-picturefill" target="_blank">angular-picturefill</a></h3>
+  <h3><a href="https://github.com/brochachos/angular-responsive-img" target="_blank">angular-responsive-img</a></h3>
+
+<p>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture" target="_blank">Picture Element</a>
+</p>
+</section>
+
+<section>
+<h3>angular-picturefill</h3>
+<pre><code class="html" data-trim>
+<span picture-fill data-alt="Juicy hanger steak on a croissant.">
+  <span pf-src="images/sizes/steak-croissant.png"></span>
+  <span pf-src="images/sizes/steak-croissant-100.png" data-media="(min-width: 1px)"></span>
+  <span pf-src="images/sizes/steak-croissant-300.png" data-media="(min-width: 400px)"></span>
+  <span pf-src="images/sizes/steak-croissant-600.png" data-media="(min-width: 645px)"></span>
+  <span pf-src="images/sizes/steak-croissant-1024.png" data-media="(min-width: 960px)"></span>
+  <span pf-src="images/sizes/steak-croissant.png" data-media="(min-width: 1200px)"></span>
+</span>
+</code></pre>
+</section>
+
+<section>
+<h3>angular-responsive-img</h3>
+<pre><code class="html" data-trim>
+<picture width="200" height="200">
+  <source size="max-width: 400" src="http://fakeimg.pl/400/">
+  <source size="max-width: 800" src="http://fakeimg.pl/800/">
+  <source src="http://fakeimg.pl/1000/">
+</picture>
+</code></pre>
+</section>
+<section>
+  <h1>Cordova Tricks</h1>
+</section>
+
+<section>
+  <h3 class="fragment">
+    <em>How do I change my app's name?</em>
+  </h3>
+  <h3 class="fragment">
+    <em>How do I change my app's ID?</em>
+  </h3>
+  <h3 class="fragment">
+    <em>How keep my app's version in sync?</em>
+  </h3>
+  <h1 class="fragment">
+    ¯\_(ツ)_/¯
+  </h1>
+</section>
+
+<section>
+  <h3>We can use gulp for that</h3>
+  <h3><a href="https://www.npmjs.com/package/gulp-cordova-bump" targe="_blank">gulp-cordova-bump</a></h3>
+  <h3><a href="https://www.npmjs.com/package/gulp-cordova-config" targe="_blank">gulp-cordova-config</a></h3>
+</section>
+
+
+<section>
+  <pre><code class="bash">
+$ npm install --save-dev gulp-cordova-bump
+  </code></pre>
+
+  <pre><code class="javascript">
+gulp.task('bump', require('gulp-cordova-bump'));
+  </code></pre>
+</section>
+
+
+<section>
+  <pre><code class="bash">
+# non-breaking bug fixes
+$ gulp bump --patch
+
+# non-breaking features
+$ gulp bump --minor
+
+# breaking changes
+$ gulp bump --major
+
+$ gulp bump --setversion=2.1.0
+  </code></pre>
+
+<p>
+<em>SEMVER FTW</em>
+</p>
+
+</section>
+
+
+<section>
+  <p>Keeps your <code>package.json</code>, <code>bower.json</code>, and <code>config.xml</code></p>
+  <p>Useful for developers</p>
+  <p>Plus...it's totally cool</p>
+  <h3 class="fragment">ヾ(⌐■_■)ノ♪</h3>
+</section>
+
+<section>
+  <h3>
+    <a href="https://github.com/mhartington/gulp-cordova-config" target="_blank">gulp-cordova-config</a>
+  </h3>
+  <p>
+    <small>
+      ...made by yours truly...inspired by gulp-cordova-bump
+    </small>
+  </p>
+</section>
+
+<section>
+  <pre><code class="bash">
+$ npm install -g gulp-cordova-config
+  </code></pre>
+
+  <pre><code class="bash">
+gulp.task('config', require('gulp-cordova-config'));
+  </code></pre>
+</section>
+
+<section>
+  <pre><code class="bash">
+# default id: com.ionicframework.app_name
+# reverse domain style id
+$ gulp config --appId="com.new.id"
+
+# displayed name of your app
+$ gulp config --appName="newApp"
+  </code></pre>
+</section>
+
+<section>
+  <h3>General Message</h3>
+  <p>Custimize Ionic's build setup to fit <em>your</em> needs</p>
+  <p>When in doubt, be lazy and automate things</p>
+  <p>Have fun with it, even if it seems too much</p>
+  <p class="fragment">Always use emojicons</p>
+</section>
+
+<section data-background="white">
+<p>(•_•)</p>
+<br>
+
+<p>( •_•)>⌐■-■</p>
+<br>
+
+<p>(⌐■_■)</p>
+</section>
+      <section>
+        <h2>
+          <code style="font-size:60px; text-transform: lowercase">&lt;/html&gt;</code>
+        </h2>
+        <h3>
+          <a style="text-transform: lowercase;" href="https://twitter.com/ionicframework" target="_blank">
+              @mhartington
+            </a>
+        </h3>
+        <h4>
+          <a style="text-transform: lowercase;" href="http://mhartington.github.io/ionic-san-francisco" target="_blank">
+              mhartington.github.io/ionic-san-francisco
+            </a>
+        </h4>
+      </section>
+
+    </div>
+
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+
+  <script>
+      Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [{
+          src: 'lib/js/classList.js',
+          condition: function() {
+            return !document.body.classList;
+          }
+        }, {
+          src: 'plugin/markdown/marked.js',
+          condition: function() {
+            return !!document.querySelector('[data-markdown]');
+          }
+        }, {
+          src: 'plugin/markdown/markdown.js',
+          condition: function() {
+            return !!document.querySelector('[data-markdown]');
+          }
+        }, {
+          src: 'plugin/highlight/highlight.js',
+          async: true,
+          condition: function() {
+            return !!document.querySelector('pre code');
+          },
+          callback: function() {
+            hljs.initHighlightingOnLoad();
+          }
+        }, {
+          src: 'plugin/zoom-js/zoom.js',
+          async: true
+        }, {
+          src: 'plugin/notes/notes.js',
+          async: true
+        }]
+      });
+
+      Reveal.addEventListener('slidechanged', function(event) {
+        // load iframes on page enter to speed up initial load time
+        console.log(event)
+        var iframe = event.currentSlide.querySelector('iframe')
+        if (iframe) {
+          iframe.setAttribute('src', iframe.getAttribute('isrc'));
+        }
+
+        var prevIframe = event.previousSlide.querySelector('iframe');
+        if (prevIframe) {
+          prevIframe.setAttribute('src', '');
+        }
+
+        // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+      });
+    </script>
+
+  </body>
+
+</html> callback: function() { hljs.initHighlightingOnLoad(); } }, { src: 'plugin/zoom-js/zoom.js', async: true }, { src: 'plugin/notes/notes.js', async: true }] }); Reveal.addEventListener('slidechanged', function(event) { // load iframes on page enter to speed
+up initial load time console.log(event) var iframe = event.currentSlide.querySelector('iframe') if (iframe) { iframe.setAttribute('src', iframe.getAttribute('isrc')); } var prevIframe = event.previousSlide.querySelector('iframe'); if (prevIframe) { prevIframe.setAttribute('src',
+''); } // event.previousSlide, event.currentSlide, event.indexh, event.indexv });
+</script>
+
+</body>
+
+</html>
